@@ -1,53 +1,45 @@
 #221RDB014 Mihails Ruhļa 13. grupa
 import sys
-from typing import List
 import threading
+def compute_height(n, parents):
+    tree = {}
+    for node, parent in enumerate(parents):
+        if parent == -1:
+            root = node
+        else:
+            if parent in tree:
+                tree[parent].append(node)
+            else:
+                tree[parent] = [node]
 
-input = sys.stdin.readline
+    stack = [(root, 1)]
+    max_height = 1
 
-def dfs(v: int, pa: int, path: int, mx: List[int], g: List[List[int]]) -> None:
-    mx[v] = path
-    for i in g[v]:
-        if mx[i] > 0:
-            continue
-        dfs(i, v, path + 1, mx, g)
+    while stack:
+        node, height = stack.pop()
+        max_height = max(max_height, height)
+        if node in tree:
+            for child in tree[node]:
+                stack.append((child, height + 1))
 
-def main() -> None:
+    return max_height
+
+def main():
     mode = input()
-    ans = 0
-    mx = [0] * 1007
-    n = 0
-    root = 0
-    g = [[] for _ in range(1007)]
     if "F" in mode:
-        filename = input()
-        if"a" not in filename:
-            with open(str("test/"+filename), mode ="r") as f:
+            filename = input()
+            if"a" not in filename:
+              with open(str("test/"+filename), mode ="r") as f:
                 n = int(f.readline())
                 parents = list(map(int, f.readline().split()))
-                for i, j in enumerate(parents):
-                    if j == -1:
-                        root = i
-                        continue
-                    g[i].append(j)
-                    g[j].append(i)
+            else:
+                print("error")
+    elif "I" in mode:
+            n = int(input())
+            parents = list(map(int, input().split()))
     else:
-        n = int(input())
-        for i in range(n):
-            v = int(input())
-            if v == -1:
-                root = i
-                continue
-            g[v].append(i)
-            g[i].append(v)
-
-    dfs(root, -1, 1, mx, g)
-
-    for i in range(n):
-        ans = max(ans, mx[i])
-
-    print(ans)
-
+           print("invalid mode.")
+    print(compute_height(n, parents))
 sys.setrecursionlimit(10**7)  # max depth of recursion
 threading.stack_size(2**27)   # new thread will get stack of such size
 threading.Thread(target=main).start()
