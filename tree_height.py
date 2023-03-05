@@ -1,15 +1,11 @@
 #221RDB014 Mihails Ruhļa 13. grupa
 import sys
-from typing import List, Tuple
+from typing import List
 import threading
 
 input = sys.stdin.readline
 
-ll = int
-ld = float
-pt = Tuple[ll, ll]
-
-def dfs(v: ll, pa: ll, path: ll, mx: List[ll], g: List[List[ll]]) -> None:
+def dfs(v: int, pa: int, path: int, mx: List[int], g: List[List[int]]) -> None:
     mx[v] = path
     for i in g[v]:
         if mx[i] > 0:
@@ -19,10 +15,10 @@ def dfs(v: ll, pa: ll, path: ll, mx: List[ll], g: List[List[ll]]) -> None:
 def main() -> None:
     mode = input()
     ans = 0
-    mx = [0] * 107
+    mx = [0] * 1007
     n = 0
     root = 0
-    g = [[] for _ in range(107)]
+    g = [[] for _ in range(1007)]
     if "F" in mode:
         filename = input()
         if"a" not in filename:
@@ -36,9 +32,9 @@ def main() -> None:
                     g[i].append(j)
                     g[j].append(i)
     else:
-        n = ll(input())
+        n = int(input())
         for i in range(n):
-            v = ll(input())
+            v = int(input())
             if v == -1:
                 root = i
                 continue
